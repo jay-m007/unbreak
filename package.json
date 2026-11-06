@@ -1,0 +1,21 @@
+{
+  "name": "unbreak",
+  "version": "0.1.0",
+  "description": "Upgrade a library and let Unbreak fix the code it breaks. Every fix is checked by the TypeScript compiler before it is kept.",
+  "type": "module",
+  "bin": { "unbreak": "bin/unbreak.js" },
+  "files": ["bin", "dist", "recipes", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "unbreak": "node src/cli.ts"
+  },
+  "engines": { "node": ">=22.18" },
+  "keywords": ["migration", "codemod", "upgrade", "breaking-changes", "typescript", "refactoring", "dependencies", "cli"],
+  "author": "Jay Maurya",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/jay-m007/unbreak.git" },
+  "dependencies": { "typescript": "5.9.3" },
+  "devDependencies": { "@types/node": "^22.18.0" }
+}

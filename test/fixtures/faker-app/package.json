@@ -1,0 +1,6 @@
+{
+  "name": "faker-app",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@faker-js/faker": "^8.4.1" }
+}
