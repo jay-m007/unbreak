@@ -3,7 +3,7 @@
   "ok": true,
   "from": "8.0.2",
   "to": "9.9.0",
-  "ms": 12083,
+  "ms": 15066,
   "broken": 3,
   "hidden": 1,
   "fixed": 4,
@@ -16,6 +16,7 @@
    "faker.internet.avatar \u2192 faker.image.avatar",
    "option precision \u2192 multipleOf"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "APIs-guru/graphql-faker"
@@ -24,7 +25,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 10187,
+  "ms": 13885,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -34,6 +35,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "Cheddybop-Digital/htmx-demo"
@@ -42,7 +44,7 @@
   "ok": true,
   "from": "8.1.0",
   "to": "9.9.0",
-  "ms": 60992,
+  "ms": 69865,
   "broken": 10,
   "hidden": 0,
   "fixed": 10,
@@ -61,6 +63,7 @@
    "faker.internet.avatar \u2192 faker.image.avatar",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "Gatewatcher/skin"
@@ -69,7 +72,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 10609,
+  "ms": 13658,
   "broken": 1,
   "hidden": 0,
   "fixed": 0,
@@ -77,6 +80,7 @@
   "remaining": 1,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [
    "faker.datatype.datetime \u2192 faker.date.anytime: Object literal may only specify known properties, and 'max' does not exist in type '{ refDate?: string | number | Date; }'."
   ],
@@ -89,7 +93,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 11608,
+  "ms": 14316,
   "broken": 6,
   "hidden": 0,
   "fixed": 6,
@@ -104,6 +108,7 @@
    "faker.date.between(from, to) \u2192 faker.date.between({ from, to })",
    "faker.datatype.uuid \u2192 faker.string.uuid"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "Gudaites/mycareforce-back"
@@ -112,7 +117,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 15546,
+  "ms": 21329,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -122,6 +127,7 @@
   "fixes": [
    "faker.random.word \u2192 faker.lorem.word"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "H3lltronik/nutras_erp_api"
@@ -130,7 +136,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 11313,
+  "ms": 15072,
   "broken": 6,
   "hidden": 0,
   "fixed": 6,
@@ -145,6 +151,10 @@
    "faker.company.bsNoun \u2192 faker.company.buzzNoun",
    "faker.company.suffixes \u2192 faker.company.name"
   ],
+  "review": [
+   "faker.company.suffixes \u2192 faker.company.name: returns string instead of string[]",
+   "faker.company.suffixes \u2192 faker.company.name: returns string instead of string[]"
+  ],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "KelySaina/faker-data"
@@ -153,7 +163,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 10224,
+  "ms": 10814,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -163,6 +173,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "ManishPJha/next-prisma-starter"
@@ -171,7 +182,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 14193,
+  "ms": 17574,
   "broken": 4,
   "hidden": 0,
   "fixed": 4,
@@ -184,6 +195,7 @@
    "faker.finance.account \u2192 faker.finance.accountNumber",
    "faker.random.alphaNumeric \u2192 faker.string.alphanumeric"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "NocerGal/Blog---From-Adam-to-Deve"
@@ -192,7 +204,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 13543,
+  "ms": 16854,
   "broken": 2,
   "hidden": 0,
   "fixed": 2,
@@ -203,6 +215,7 @@
    "faker.internet.avatar \u2192 faker.image.avatar",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "SukumDecha/fullstack-nextjs"
@@ -211,7 +224,7 @@
   "ok": true,
   "from": "8.1.0",
   "to": "9.9.0",
-  "ms": 24709,
+  "ms": 27253,
   "broken": 2,
   "hidden": 0,
   "fixed": 2,
@@ -222,6 +235,7 @@
    "faker.internet.avatar \u2192 faker.image.avatar",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "TableRise/tablerise-backend"
@@ -230,7 +244,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 13329,
+  "ms": 13991,
   "broken": 2,
   "hidden": 0,
   "fixed": 2,
@@ -241,6 +255,7 @@
    "faker.internet.avatar \u2192 faker.image.avatar",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "ZFlucKZ/leave-management-app-router"
@@ -249,7 +264,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12905,
+  "ms": 12622,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -259,6 +274,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "aakash19here/recipe-share"
@@ -267,7 +283,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12795,
+  "ms": 13386,
   "broken": 7,
   "hidden": 0,
   "fixed": 6,
@@ -282,6 +298,7 @@
    "faker.random.word \u2192 faker.lorem.word",
    "faker.datatype.uuid \u2192 faker.string.uuid"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [
    "Property 'unsplash' does not exist on type 'ImageModule'."
@@ -292,7 +309,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 9178,
+  "ms": 9460,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -300,6 +317,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "ascii-16/expressjs-typescript-prisma-boilerplate"
@@ -308,7 +326,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12069,
+  "ms": 11974,
   "broken": 7,
   "hidden": 0,
   "fixed": 6,
@@ -323,6 +341,7 @@
    "faker.random.word \u2192 faker.lorem.word",
    "faker.datatype.uuid \u2192 faker.string.uuid"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [
    "Property 'unsplash' does not exist on type 'ImageModule'."
@@ -333,7 +352,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 17737,
+  "ms": 17795,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -343,6 +362,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "devoter-xyz/devoter-app"
@@ -351,7 +371,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 10073,
+  "ms": 10539,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -359,6 +379,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "ecomfe/react-suspense-boundary"
@@ -367,7 +388,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 13990,
+  "ms": 13956,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -375,6 +396,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "faaiz99/mind-care-backend"
@@ -383,7 +405,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12145,
+  "ms": 11960,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -393,6 +415,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "frckbrice/pocker-guessing-backend"
@@ -401,7 +424,7 @@
   "ok": true,
   "from": "8.1.0",
   "to": "9.9.0",
-  "ms": 12540,
+  "ms": 11696,
   "broken": 1,
   "hidden": 0,
   "fixed": 0,
@@ -409,6 +432,7 @@
   "remaining": 1,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [
    "faker.datatype.datetime \u2192 faker.date.anytime: Object literal may only specify known properties, and 'max' does not exist in type '{ refDate?: string | number | Date | undefined; }'."
   ],
@@ -421,7 +445,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12067,
+  "ms": 11958,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -431,6 +455,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "hesxenon/realworld-htmx"
@@ -439,7 +464,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12343,
+  "ms": 12266,
   "broken": 6,
   "hidden": 0,
   "fixed": 6,
@@ -454,6 +479,7 @@
    "option precision \u2192 multipleOf",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "htmlacademy-react/1535715-six-cities-14"
@@ -462,7 +488,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12222,
+  "ms": 11816,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -472,6 +498,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "huangfishburger/join-me"
@@ -480,7 +507,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 15696,
+  "ms": 16803,
   "broken": 5,
   "hidden": 0,
   "fixed": 2,
@@ -491,6 +518,7 @@
    "faker.datatype.number \u2192 faker.number.int",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [
    "faker.datatype.number \u2192 faker.number.float: Object literal may only specify known properties, and 'precision' does not exist in type '{ min?: number | undefined; max?: number | undefined; fractionDigits?: number | undefined; multipleOf?: number | undefined; }'.",
    "faker.datatype.number \u2192 faker.number.float: Object literal may only specify known properties, and 'precision' does not exist in type '{ min?: number | undefined; max?: number | undefined; fractionDigits?: number | undefined; multipleOf?: number | undefined; }'."
@@ -506,7 +534,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 52905,
+  "ms": 69407,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -514,6 +542,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "infoderm/patients"
@@ -522,7 +551,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 13910,
+  "ms": 18436,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -532,6 +561,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "johnpgr/t3-app-router-edge-drizzle-turso"
@@ -540,7 +570,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 13005,
+  "ms": 16798,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -548,6 +578,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "junaidaslam786/accounts"
@@ -556,7 +587,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12200,
+  "ms": 17118,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -566,6 +597,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "jyahuang/wp_hw3_deploy"
@@ -574,7 +606,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12389,
+  "ms": 17099,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -582,6 +614,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "luanmenezes0/rent-app"
@@ -590,7 +623,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 17310,
+  "ms": 20169,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -600,6 +633,7 @@
   "fixes": [
    "faker.datatype.number \u2192 faker.number.int"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "luisFilipePT/shadcn-ui-theme-explorer"
@@ -608,7 +642,7 @@
   "ok": true,
   "from": "8.0.0-alpha.1",
   "to": "9.9.0",
-  "ms": 30285,
+  "ms": 40274,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -616,6 +650,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "machinefi-org/w3bstream-studio"
@@ -624,7 +659,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12268,
+  "ms": 20297,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -634,6 +669,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "minast1/next13"
@@ -642,7 +678,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 17185,
+  "ms": 26160,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -652,6 +688,7 @@
   "fixes": [
    "faker.company.bs \u2192 faker.company.buzzPhrase"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "mist3rW/7job"
@@ -660,7 +697,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 18185,
+  "ms": 19400,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -668,6 +705,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "mouadlouhichi/saas-boilerplate"
@@ -676,7 +714,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 14801,
+  "ms": 15460,
   "broken": 2,
   "hidden": 0,
   "fixed": 2,
@@ -687,6 +725,7 @@
    "faker.datatype.uuid \u2192 faker.string.uuid",
    "faker.random.word \u2192 faker.lorem.word"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "ngocle2497/RNChallengeV3"
@@ -695,7 +734,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 11306,
+  "ms": 12010,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -705,6 +744,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "ntuee-web-programming/112-1-unit2-twitter-clone"
@@ -713,7 +753,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 19652,
+  "ms": 20438,
   "broken": 2,
   "hidden": 0,
   "fixed": 2,
@@ -724,6 +764,7 @@
    "faker.random.alphaNumeric \u2192 faker.string.alphanumeric",
    "faker.random.alphaNumeric \u2192 faker.string.alphanumeric"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "open-source-labs/SeeQR"
@@ -732,7 +773,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12159,
+  "ms": 12781,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -742,6 +783,7 @@
   "fixes": [
    "faker.company.bs \u2192 faker.company.buzzPhrase"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "opensource254/mock-api"
@@ -750,7 +792,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 12019,
+  "ms": 12122,
   "broken": 7,
   "hidden": 0,
   "fixed": 6,
@@ -765,6 +807,7 @@
    "faker.random.word \u2192 faker.lorem.word",
    "faker.datatype.uuid \u2192 faker.string.uuid"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [
    "Property 'unsplash' does not exist on type 'ImageModule'."
@@ -775,7 +818,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 17111,
+  "ms": 17420,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -785,6 +828,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "rayaaaneee/WorldMaster"
@@ -793,7 +837,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 10571,
+  "ms": 10874,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -801,6 +845,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "richardguerre/use-relay-mock-environment"
@@ -809,7 +854,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 11110,
+  "ms": 11362,
   "broken": 4,
   "hidden": 0,
   "fixed": 3,
@@ -821,6 +866,7 @@
    "faker.datatype.number \u2192 faker.number.int",
    "faker.datatype.number \u2192 faker.number.int"
   ],
+  "review": [],
   "rejectedReasons": [
    "faker.datatype.datetime \u2192 faker.date.anytime: Object literal may only specify known properties, and 'max' does not exist in type '{ refDate?: string | number | Date | undefined; }'."
   ],
@@ -833,7 +879,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 17232,
+  "ms": 16823,
   "broken": 0,
   "hidden": 0,
   "fixed": 0,
@@ -841,6 +887,7 @@
   "remaining": 0,
   "files": 0,
   "fixes": [],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "superkacper4/rap-gra-remix"
@@ -849,7 +896,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 10870,
+  "ms": 11401,
   "broken": 1,
   "hidden": 0,
   "fixed": 1,
@@ -859,6 +906,7 @@
   "fixes": [
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "victorsoares96/backend-template"
@@ -867,7 +915,7 @@
   "ok": true,
   "from": "8.4.1",
   "to": "9.9.0",
-  "ms": 7366,
+  "ms": 6523,
   "broken": 24,
   "hidden": 0,
   "fixed": 24,
@@ -900,6 +948,7 @@
    "faker.internet.avatar \u2192 faker.image.avatar",
    "faker.internet.avatar \u2192 faker.image.avatar"
   ],
+  "review": [],
   "rejectedReasons": [],
   "remainingErrors": [],
   "repo": "xaviervamanda/WannaBet"
