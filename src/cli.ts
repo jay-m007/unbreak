@@ -4,7 +4,7 @@ import { execSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { migrate, writeResult } from "./migrate.ts";
-import { diffText, markdownReport, terminalSummary, bold, dim, green, red, yellow } from "./report.ts";
+import { diffText, markdownReport, terminalSummary, bold, dim, green, red, yellow, cyan } from "./report.ts";
 import { fetchPackage } from "./npm.ts";
 import { buildSurface } from "./surface.ts";
 import { deriveRules } from "./rules.ts";
@@ -108,7 +108,11 @@ export function main(argv = process.argv.slice(2)): number {
     const quiet = !!flags.json;
     const result = migrate({ projectDir, pkg: name, to: version, deprecations: !!flags.deprecations, log: quiet ? undefined : (m) => console.log(dim("· " + m)) });
     const apply = !!flags.apply;
-    if (!quiet && flags.diff !== false && result.updated.size) console.log("\n" + diffText(result));
+    if (!quiet && flags.diff !== false && result.updated.size) {
+      const colored = diffText(result).split("\n").map((l) =>
+        l.startsWith("+++") || l.startsWith("---") ? bold(l) : l.startsWith("@@") ? cyan(l) : l.startsWith("+") ? green(l) : l.startsWith("-") ? red(l) : l).join("\n");
+      console.log("\n" + colored.trimEnd());
+    }
     let testResult: { command: string; ok: boolean } | undefined;
     if (apply) {
       const pjBefore = existsSync(join(projectDir, "package.json")) ? readFileSync(join(projectDir, "package.json"), "utf8") : undefined;

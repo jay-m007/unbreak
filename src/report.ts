@@ -5,7 +5,7 @@ import type { Usage } from "./usages.ts";
 import type { Diag } from "./project.ts";
 import { unifiedDiff } from "./edits.ts";
 
-const useColor = process.stdout.isTTY && !process.env.NO_COLOR;
+const useColor = (process.stdout.isTTY || !!process.env.FORCE_COLOR) && !process.env.NO_COLOR;
 const c = (code: number) => (s: string) => (useColor ? `\x1b[${code}m${s}\x1b[0m` : s);
 export const bold = c(1), dim = c(2), red = c(31), green = c(32), yellow = c(33), cyan = c(36);
 

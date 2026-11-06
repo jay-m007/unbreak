@@ -1,0 +1,907 @@
+[
+ {
+  "ok": true,
+  "from": "8.0.2",
+  "to": "9.9.0",
+  "ms": 12083,
+  "broken": 3,
+  "hidden": 1,
+  "fixed": 4,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "option precision \u2192 multipleOf",
+   "faker.finance.iban(formatted, countryCode) \u2192 faker.finance.iban({ formatted, countryCode })",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "option precision \u2192 multipleOf"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "APIs-guru/graphql-faker"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 10187,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "Cheddybop-Digital/htmx-demo"
+ },
+ {
+  "ok": true,
+  "from": "8.1.0",
+  "to": "9.9.0",
+  "ms": 60992,
+  "broken": 10,
+  "hidden": 0,
+  "fixed": 10,
+  "undone": 0,
+  "remaining": 0,
+  "files": 10,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "Gatewatcher/skin"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 10609,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 1,
+  "remaining": 1,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [
+   "faker.datatype.datetime \u2192 faker.date.anytime: Object literal may only specify known properties, and 'max' does not exist in type '{ refDate?: string | number | Date; }'."
+  ],
+  "remainingErrors": [
+   "Property 'datetime' does not exist on type 'DatatypeModule'."
+  ],
+  "repo": "GenjiruSUchiwa/athleoadminui-nuxt"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 11608,
+  "broken": 6,
+  "hidden": 0,
+  "fixed": 6,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.datatype.uuid \u2192 faker.string.uuid",
+   "faker.random.numeric \u2192 faker.string.numeric",
+   "faker.random.numeric \u2192 faker.string.numeric",
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.date.between(from, to) \u2192 faker.date.between({ from, to })",
+   "faker.datatype.uuid \u2192 faker.string.uuid"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "Gudaites/mycareforce-back"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 15546,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.random.word \u2192 faker.lorem.word"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "H3lltronik/nutras_erp_api"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 11313,
+  "broken": 6,
+  "hidden": 0,
+  "fixed": 6,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.company.suffixes \u2192 faker.company.name",
+   "faker.company.bs \u2192 faker.company.buzzPhrase",
+   "faker.company.bsAdjective \u2192 faker.company.buzzAdjective",
+   "faker.company.bsBuzz \u2192 faker.company.buzzVerb",
+   "faker.company.bsNoun \u2192 faker.company.buzzNoun",
+   "faker.company.suffixes \u2192 faker.company.name"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "KelySaina/faker-data"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 10224,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "ManishPJha/next-prisma-starter"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 14193,
+  "broken": 4,
+  "hidden": 0,
+  "fixed": 4,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.random.word \u2192 faker.lorem.word",
+   "faker.finance.account \u2192 faker.finance.accountNumber",
+   "faker.random.alphaNumeric \u2192 faker.string.alphanumeric"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "NocerGal/Blog---From-Adam-to-Deve"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 13543,
+  "broken": 2,
+  "hidden": 0,
+  "fixed": 2,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "SukumDecha/fullstack-nextjs"
+ },
+ {
+  "ok": true,
+  "from": "8.1.0",
+  "to": "9.9.0",
+  "ms": 24709,
+  "broken": 2,
+  "hidden": 0,
+  "fixed": 2,
+  "undone": 0,
+  "remaining": 0,
+  "files": 2,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "TableRise/tablerise-backend"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 13329,
+  "broken": 2,
+  "hidden": 0,
+  "fixed": 2,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "ZFlucKZ/leave-management-app-router"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12905,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "aakash19here/recipe-share"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12795,
+  "broken": 7,
+  "hidden": 0,
+  "fixed": 6,
+  "undone": 0,
+  "remaining": 1,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.random.words \u2192 faker.lorem.words",
+   "faker.random.words \u2192 faker.lorem.words",
+   "faker.random.word \u2192 faker.lorem.word",
+   "faker.datatype.uuid \u2192 faker.string.uuid"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [
+   "Property 'unsplash' does not exist on type 'ImageModule'."
+  ],
+  "repo": "anasdevv/next-blog"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 9178,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "ascii-16/expressjs-typescript-prisma-boilerplate"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12069,
+  "broken": 7,
+  "hidden": 0,
+  "fixed": 6,
+  "undone": 0,
+  "remaining": 1,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.random.words \u2192 faker.lorem.words",
+   "faker.random.words \u2192 faker.lorem.words",
+   "faker.random.word \u2192 faker.lorem.word",
+   "faker.datatype.uuid \u2192 faker.string.uuid"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [
+   "Property 'unsplash' does not exist on type 'ImageModule'."
+  ],
+  "repo": "carinareyv/Blog-in-TRPC"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 17737,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "devoter-xyz/devoter-app"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 10073,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "ecomfe/react-suspense-boundary"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 13990,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "faaiz99/mind-care-backend"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12145,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "frckbrice/pocker-guessing-backend"
+ },
+ {
+  "ok": true,
+  "from": "8.1.0",
+  "to": "9.9.0",
+  "ms": 12540,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 1,
+  "remaining": 1,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [
+   "faker.datatype.datetime \u2192 faker.date.anytime: Object literal may only specify known properties, and 'max' does not exist in type '{ refDate?: string | number | Date | undefined; }'."
+  ],
+  "remainingErrors": [
+   "Property 'datetime' does not exist on type 'DatatypeModule'."
+  ],
+  "repo": "freewind-demos/typescript-tanstack-react-table-sorting-demo"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12067,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "hesxenon/realworld-htmx"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12343,
+  "broken": 6,
+  "hidden": 0,
+  "fixed": 6,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "option precision \u2192 multipleOf",
+   "option precision \u2192 multipleOf",
+   "option precision \u2192 multipleOf",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "option precision \u2192 multipleOf",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "htmlacademy-react/1535715-six-cities-14"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12222,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "huangfishburger/join-me"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 15696,
+  "broken": 5,
+  "hidden": 0,
+  "fixed": 2,
+  "undone": 2,
+  "remaining": 3,
+  "files": 1,
+  "fixes": [
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [
+   "faker.datatype.number \u2192 faker.number.float: Object literal may only specify known properties, and 'precision' does not exist in type '{ min?: number | undefined; max?: number | undefined; fractionDigits?: number | undefined; multipleOf?: number | undefined; }'.",
+   "faker.datatype.number \u2192 faker.number.float: Object literal may only specify known properties, and 'precision' does not exist in type '{ min?: number | undefined; max?: number | undefined; fractionDigits?: number | undefined; multipleOf?: number | undefined; }'."
+  ],
+  "remainingErrors": [
+   "Property 'number' does not exist on type 'DatatypeModule'.",
+   "Type '\"+34 ##-###-##-##\"' has no properties in common with type '{ style?: \"human\" | \"national\" | \"international\" | undefined; }'.",
+   "Property 'number' does not exist on type 'DatatypeModule'."
+  ],
+  "repo": "icediver/red-summer-2023"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 52905,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "infoderm/patients"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 13910,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "johnpgr/t3-app-router-edge-drizzle-turso"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 13005,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "junaidaslam786/accounts"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12200,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "jyahuang/wp_hw3_deploy"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12389,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "luanmenezes0/rent-app"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 17310,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.datatype.number \u2192 faker.number.int"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "luisFilipePT/shadcn-ui-theme-explorer"
+ },
+ {
+  "ok": true,
+  "from": "8.0.0-alpha.1",
+  "to": "9.9.0",
+  "ms": 30285,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "machinefi-org/w3bstream-studio"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12268,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "minast1/next13"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 17185,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.company.bs \u2192 faker.company.buzzPhrase"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "mist3rW/7job"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 18185,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "mouadlouhichi/saas-boilerplate"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 14801,
+  "broken": 2,
+  "hidden": 0,
+  "fixed": 2,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.datatype.uuid \u2192 faker.string.uuid",
+   "faker.random.word \u2192 faker.lorem.word"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "ngocle2497/RNChallengeV3"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 11306,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "ntuee-web-programming/112-1-unit2-twitter-clone"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 19652,
+  "broken": 2,
+  "hidden": 0,
+  "fixed": 2,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.random.alphaNumeric \u2192 faker.string.alphanumeric",
+   "faker.random.alphaNumeric \u2192 faker.string.alphanumeric"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "open-source-labs/SeeQR"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12159,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.company.bs \u2192 faker.company.buzzPhrase"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "opensource254/mock-api"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 12019,
+  "broken": 7,
+  "hidden": 0,
+  "fixed": 6,
+  "undone": 0,
+  "remaining": 1,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.random.words \u2192 faker.lorem.words",
+   "faker.random.words \u2192 faker.lorem.words",
+   "faker.random.word \u2192 faker.lorem.word",
+   "faker.datatype.uuid \u2192 faker.string.uuid"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [
+   "Property 'unsplash' does not exist on type 'ImageModule'."
+  ],
+  "repo": "raselinfo/t3-stack"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 17111,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "rayaaaneee/WorldMaster"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 10571,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "richardguerre/use-relay-mock-environment"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 11110,
+  "broken": 4,
+  "hidden": 0,
+  "fixed": 3,
+  "undone": 1,
+  "remaining": 1,
+  "files": 1,
+  "fixes": [
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.datatype.number \u2192 faker.number.int",
+   "faker.datatype.number \u2192 faker.number.int"
+  ],
+  "rejectedReasons": [
+   "faker.datatype.datetime \u2192 faker.date.anytime: Object literal may only specify known properties, and 'max' does not exist in type '{ refDate?: string | number | Date | undefined; }'."
+  ],
+  "remainingErrors": [
+   "Property 'datetime' does not exist on type 'DatatypeModule'."
+  ],
+  "repo": "shipurjan/shadcnui-virtualized-data-table"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 17232,
+  "broken": 0,
+  "hidden": 0,
+  "fixed": 0,
+  "undone": 0,
+  "remaining": 0,
+  "files": 0,
+  "fixes": [],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "superkacper4/rap-gra-remix"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 10870,
+  "broken": 1,
+  "hidden": 0,
+  "fixed": 1,
+  "undone": 0,
+  "remaining": 0,
+  "files": 1,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "victorsoares96/backend-template"
+ },
+ {
+  "ok": true,
+  "from": "8.4.1",
+  "to": "9.9.0",
+  "ms": 7366,
+  "broken": 24,
+  "hidden": 0,
+  "fixed": 24,
+  "undone": 0,
+  "remaining": 0,
+  "files": 4,
+  "fixes": [
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar",
+   "faker.internet.avatar \u2192 faker.image.avatar"
+  ],
+  "rejectedReasons": [],
+  "remainingErrors": [],
+  "repo": "xaviervamanda/WannaBet"
+ }
+]

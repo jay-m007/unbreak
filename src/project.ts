@@ -43,12 +43,14 @@ function parseConfig(configPath: string): { options: ts.CompilerOptions; rootNam
   let options = parsed.options;
   // Solution-style tsconfig ("files": [], "references": [...]): use the referenced projects.
   if (!rootNames.length && parsed.projectReferences?.length) {
+    // Use the settings of the referenced project with the most files (usually the app itself).
+    let most = -1;
     for (const ref of parsed.projectReferences) {
       const p = ts.resolveProjectReferencePath(ref);
       if (!existsSync(p)) continue;
       const sub = parseConfig(p);
       rootNames = rootNames.concat(sub.rootNames);
-      if (!Object.keys(options).length || options.composite) options = sub.options;
+      if (sub.rootNames.length > most) { most = sub.rootNames.length; options = sub.options; }
     }
   }
   return { options, rootNames };
