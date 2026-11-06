@@ -239,7 +239,7 @@ export function migrate(opts: MigrateOptions): MigrateResult {
 /** Writes the fixed files and bumps the version in package.json. Returns the files written. */
 export function writeResult(r: MigrateResult, bumpPackageJson = true): string[] {
   const written: string[] = [];
-  for (const [file, text] of r.updated) { writeFileSync(file, text); written.push(relative(r.project.dir, file)); }
+  for (const [file, text] of r.updated) { writeFileSync(file, text); written.push(relative(r.project.dir, file).replace(/\\/g, "/")); }
   const pjPath = join(r.project.dir, "package.json");
   if (bumpPackageJson && existsSync(pjPath)) {
     const raw = readFileSync(pjPath, "utf8");
