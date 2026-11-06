@@ -4,7 +4,7 @@
 import type { ApiEntry, SigInfo, Surface } from "./surface.ts";
 
 export type Rule =
-  | { kind: "rename"; from: string; to: string; objectArgs?: string[]; source: RuleSource; note: string }
+  | { kind: "rename"; from: string; to: string; objectArgs?: string[]; alternatives?: string[]; source: RuleSource; note: string }
   | { kind: "toObject"; path: string; sigKey: string; names: string[]; source: RuleSource; note: string }
   | { kind: "renameOption"; path: string; to: string; source: RuleSource; note: string }
   | { kind: "removed"; path: string; source: RuleSource; note: string };
@@ -81,6 +81,43 @@ function positionalNames(sig: SigInfo, hintNames: string[]): string[] | undefine
   return undefined;
 }
 
+/** A callable can only be replaced by a callable, and a path can't be replaced by its own parent. */
+function compatible(from: ApiEntry, to: ApiEntry): boolean {
+  if (from.path.startsWith(to.path + ".") || from.path.startsWith(to.path + "#")) return false;
+  const callable = (e: ApiEntry) => e.signatures.length > 0 || e.kind === "method" || e.kind === "function";
+  return callable(from) === callable(to) || from.kind === "class" || to.kind === "class";
+}
+
+/** Same-signature renames must also look alike (closeConnection / disconnect share "connect"),
+ *  otherwise any two `() => string` methods would match (internet.avatar / internet.jwtAlgorithm). */
+export function similarNames(a: string, b: string): boolean {
+  const x = a.toLowerCase(), y = b.toLowerCase();
+  let best = 0;
+  for (let i = 0; i < x.length; i++) {
+    for (let j = 0; j < y.length; j++) {
+      let k = 0;
+      while (i + k < x.length && j + k < y.length && x[i + k] === y[j + k]) k++;
+      if (k > best) best = k;
+    }
+  }
+  return best >= Math.min(5, Math.min(x.length, y.length));
+}
+
+/** Copies @deprecated notes from a newer release of the same major (they are usually added
+ *  there, just before the removal) onto the installed version's surface. */
+export function withNotesFrom(prev: Surface, bridge: Surface | undefined): Surface {
+  if (!bridge) return prev;
+  const entries = new Map(prev.entries);
+  for (const [path, e] of prev.entries) {
+    const b = bridge.entries.get(path);
+    if (!b) continue;
+    const signatures = e.signatures.map((s) => s.deprecated ? s : { ...s, deprecated: b.signatures.find((x) => x.text === s.text)?.deprecated });
+    if (!e.deprecated && b.deprecated) entries.set(path, { ...e, deprecated: b.deprecated, signatures });
+    else if (signatures.some((s, i) => s.deprecated !== e.signatures[i].deprecated)) entries.set(path, { ...e, signatures });
+  }
+  return { ...prev, entries };
+}
+
 export function deriveRules(prev: Surface, next: Surface, recipeRules: Rule[] = []): Rule[] {
   const rules: Rule[] = [...recipeRules];
   const covered = new Set(recipeRules.map((r) => (r.kind === "rename" ? r.from : r.path)));
@@ -100,16 +137,16 @@ export function deriveRules(prev: Surface, next: Surface, recipeRules: Rule[] = 
     // 2. Deprecated member with a documented replacement.
     if (e.deprecated) {
       const hints = parseHint(e.deprecated).filter((h) => !h.bare || !e.path.includes("."));
-      let placed = false;
+      const targets: Array<{ to: string; objectArgs?: string[] }> = [];
       for (const h of hints) {
         const target = locate(h.path, e.path, next);
-        if (!target) continue;
+        if (!target || !compatible(e, next.entries.get(target)!)) continue;
         if (target === e.path && !h.objectArgs) continue;
-        rules.push({ kind: "rename", from: e.path, to: target, objectArgs: h.objectArgs, source: "deprecation", note: e.deprecated });
-        placed = true;
-        break;
+        if (!targets.some((t) => t.to === target)) targets.push({ to: target, objectArgs: h.objectArgs });
       }
-      if (!placed && goneInNext) rules.push({ kind: "removed", path: e.path, source: "removed", note: e.deprecated });
+      if (targets.length) {
+        rules.push({ kind: "rename", from: e.path, to: targets[0].to, objectArgs: targets[0].objectArgs, alternatives: targets.slice(1).map((t) => t.to), source: "deprecation", note: e.deprecated });
+      } else if (goneInNext) rules.push({ kind: "removed", path: e.path, source: "removed", note: e.deprecated });
     }
 
     // 3. Deprecated overload of a method that still exists: f(a, b) -> f({ a, b })
@@ -138,7 +175,7 @@ export function deriveRules(prev: Surface, next: Surface, recipeRules: Rule[] = 
     const old = prev.entries.get(path)!;
     if (!old.signatures.length) continue;
     const sigText = old.signatures.map((s) => s.text).join("|");
-    const matches = added.filter((a) => parentOf(a.path) === parentOf(path) && a.signatures.map((s) => s.text).join("|") === sigText);
+    const matches = added.filter((a) => parentOf(a.path) === parentOf(path) && a.signatures.map((s) => s.text).join("|") === sigText && similarNames(lastSegment(path), lastSegment(a.path)));
     if (matches.length === 1) {
       const i = rules.findIndex((r) => r.kind === "removed" && r.path === path);
       rules[i] = { kind: "rename", from: path, to: matches[0].path, source: "signature-match", note: `Renamed in ${next.version} (same signature).` };

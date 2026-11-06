@@ -26,6 +26,8 @@ export interface Usage {
   edits: Edit[];
   summary: string; // "faker.random.numeric -> faker.string.numeric"
   problem?: string; // set when a rule applies but no safe edit could be made
+  alternates: Array<{ edits: Edit[]; summary: string; review?: string }>; // other replacements the library suggests, tried in order
+  review?: string; // the fix compiles, but a person should look (e.g. the return type changed)
 }
 
 const slash = (p: string) => p.replace(/\\/g, "/");
@@ -81,15 +83,23 @@ export function findUsages(program: ts.Program, project: Project, pkgName: strin
     return undefined;
   };
 
+  const returnsOf = (surface: Surface, path: string) =>
+    [...new Set(surface.entries.get(path)?.signatures.map((x) => x.text.slice(x.text.lastIndexOf("=>") + 2).trim()) ?? [])].sort().join(" | ");
+  /** "returns string instead of string[]" when old and new return types differ. */
+  const returnChange = (from: string, to: string): string | undefined => {
+    const a = returnsOf(prev, from), b = returnsOf(next, to);
+    return a && b && a !== b ? `returns ${b} instead of ${a}` : undefined;
+  };
+
   for (const sf of program.getSourceFiles()) {
     if (!isProjectFile(project, sf.fileName)) continue;
     const file = slash(sf.fileName);
     const lineOf = (pos: number) => sf.getLineAndCharacterOfPosition(pos).line;
     const handled = new Set<ts.Node>();
 
-    const add = (node: ts.Node, path: string, rule: Rule, edits: Edit[], summary: string, problem?: string) => {
+    const add = (node: ts.Node, path: string, rule: Rule, edits: Edit[], summary: string, problem?: string, alternates: Usage["alternates"] = []) => {
       const start = node.getStart(sf);
-      usages.push({ id: id++, file, start, end: node.end, line: lineOf(start), path, rule, edits, summary, problem });
+      usages.push({ id: id++, file, start, end: node.end, line: lineOf(start), path, rule, edits, summary, problem, alternates });
     };
 
     const visit = (node: ts.Node) => {
@@ -102,33 +112,40 @@ export function findUsages(program: ts.Program, project: Project, pkgName: strin
           while (ts.isPropertyAccessExpression(inner)) { handled.add(inner); inner = inner.expression; }
           const { rule, to } = found;
           if (rule.kind === "rename" && to) {
-            const from = splitPath(path);
-            const dest = splitPath(to);
-            let k = 0;
-            while (k < from.length && k < dest.length && from[k] === dest[k]) k++;
-            const oldTail = from.slice(k);
-            const newTail = dest.slice(k);
-            const names = chainNames(node);
-            const tailNodes = names.slice(names.length - oldTail.length);
-            const ok = oldTail.length > 0 && tailNodes.length === oldTail.length && tailNodes.every((n, i) => n.text === oldTail[i]);
-            const summary = `${path} → ${to}`;
-            if (!ok) {
-              add(node, path, rule, [], summary, "the code reaches this member through a variable, so the path can't be rewritten safely");
-            } else {
+            const renameTo = (dest: string): { edits: Edit[]; problem?: string } => {
+              const from = splitPath(path);
+              const parts = splitPath(dest);
+              let k = 0;
+              while (k < from.length && k < parts.length && from[k] === parts[k]) k++;
+              const oldTail = from.slice(k);
+              const newTail = parts.slice(k);
+              const names = chainNames(node);
+              const tailNodes = names.slice(names.length - oldTail.length);
+              const ok = oldTail.length > 0 && newTail.length > 0 && tailNodes.length === oldTail.length && tailNodes.every((n, i) => n.text === oldTail[i]);
+              if (!ok) return { edits: [], problem: "the code reaches this member through a variable, so the path can't be rewritten safely" };
               const edits: Edit[] = [];
               if (newTail.length === oldTail.length) {
                 tailNodes.forEach((n, i) => { if (n.text !== newTail[i]) edits.push({ start: n.getStart(sf), end: n.end, text: newTail[i] }); });
               } else {
                 edits.push({ start: tailNodes[0].getStart(sf), end: tailNodes[tailNodes.length - 1].end, text: newTail.join(".") });
               }
-              let problem: string | undefined;
-              if (rule.objectArgs && ts.isCallExpression(node.parent) && node.parent.expression === node) {
+              if (rule.objectArgs && dest === rule.to && ts.isCallExpression(node.parent) && node.parent.expression === node) {
                 const e = objectArgsEdit(sf, node.parent, rule.objectArgs);
-                if (typeof e === "string") problem = e;
-                else if (node.parent.arguments.length && !(node.parent.arguments.length === 1 && ts.isObjectLiteralExpression(node.parent.arguments[0]))) edits.push(e);
+                if (typeof e === "string") return { edits: [], problem: e };
+                if (node.parent.arguments.length && !(node.parent.arguments.length === 1 && ts.isObjectLiteralExpression(node.parent.arguments[0]))) edits.push(e);
               }
-              add(node, path, rule, problem ? [] : edits, summary, problem);
-            }
+              return { edits };
+            };
+            const main = renameTo(to);
+            const suffix = to === rule.to ? "" : path.slice(rule.from.length);
+            const alternates = (rule.alternatives ?? [])
+              .map((alt) => alt + suffix)
+              .filter((dest) => next.entries.has(dest))
+              .map((dest) => ({ ...renameTo(dest), summary: `${path} → ${dest}`, review: returnChange(path, dest) }))
+              .filter((a) => a.edits.length && !a.problem)
+              .map(({ edits, summary, review }) => ({ edits, summary, review }));
+            add(node, path, rule, main.problem ? [] : main.edits, `${path} → ${to}`, main.problem, alternates);
+            usages[usages.length - 1].review = returnChange(path, to);
           } else if (rule.kind === "removed") {
             add(node, path, rule, [], `${path} was removed`, rule.note);
           }

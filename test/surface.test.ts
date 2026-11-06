@@ -32,10 +32,17 @@ test("maps declarations back to their path", () => {
 test("derives one rule of each kind from the two versions", () => {
   const rules = deriveRules(v1(), v2());
   const find = (pred: (r: (typeof rules)[number]) => boolean) => rules.find(pred);
-  assert.deepEqual(find((r) => r.kind === "rename" && r.from === "makeClient"), { kind: "rename", from: "makeClient", to: "createClient", objectArgs: undefined, source: "deprecation", note: "Use `createClient` instead." });
+  const make = find((r) => r.kind === "rename" && r.from === "makeClient");
+  assert.ok(make && make.kind === "rename" && make.to === "createClient" && make.source === "deprecation");
   assert.equal(find((r) => r.kind === "rename" && r.from === "Client#getUser")?.kind === "rename" && (find((r) => r.kind === "rename" && r.from === "Client#getUser") as { to: string }).to, "Client#users.get");
   assert.ok(find((r) => r.kind === "toObject" && r.path === "Client#send" && r.names.join() === "to,body"));
   assert.ok(find((r) => r.kind === "renameOption" && r.to === "uppercase"));
   assert.ok(find((r) => r.kind === "rename" && r.from === "Client#closeConnection" && r.to === "Client#disconnect" && r.source === "signature-match"));
   assert.ok(find((r) => r.kind === "removed" && r.path === "Client#legacy"));
+});
+
+test("same-signature renames need similar names", async () => {
+  const { similarNames } = await import("../src/rules.ts");
+  assert.equal(similarNames("closeConnection", "disconnect"), true);
+  assert.equal(similarNames("avatar", "jwtAlgorithm"), false, "two unrelated () => string methods must not match");
 });

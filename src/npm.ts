@@ -29,13 +29,19 @@ export function npm(args: string[], cwd?: string): string {
   return execFileSync(cmd, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], shell, maxBuffer: 64 * 1024 * 1024 });
 }
 
+export function compareVersions(a: string, b: string): number {
+  const pa = a.split(/[.-]/), pb = b.split(/[.-]/);
+  for (let i = 0; i < 3; i++) { const d = Number(pa[i]) - Number(pb[i]); if (d) return d; }
+  return (a.includes("-") ? 0 : 1) - (b.includes("-") ? 0 : 1);
+}
+
 /** Resolves a version range or tag ("9", "latest", "^9.1") to an exact published version. */
 export function resolveVersion(name: string, spec: string): string {
   const out = npm(["view", `${name}@${spec}`, "version", "--json"]).trim();
   if (!out) throw new Error(`No published version of ${name} matches "${spec}".`);
   const parsed = JSON.parse(out);
   const list: string[] = Array.isArray(parsed) ? parsed : [parsed];
-  return list[list.length - 1];
+  return list.sort(compareVersions)[list.length - 1];
 }
 
 export function fetchPackage(name: string, spec: string): FetchedPackage {

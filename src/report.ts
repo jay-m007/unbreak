@@ -43,6 +43,11 @@ export function terminalSummary(r: MigrateResult, applied: boolean): string {
   }
   lines.push(`  The upgrade breaks ${bold(String(n.broken))} place(s) in your code${n.hidden ? ` (${n.hidden} hidden behind other errors)` : ""}.`);
   lines.push(green(`  Fixed: ${n.fixes} change(s) in ${n.files} file(s), each one type-checks against ${r.to}.`));
+  const reviews = r.fixed.filter((f) => f.usage.review);
+  if (reviews.length) {
+    lines.push(yellow(`  Check by eye: ${reviews.length} fix(es) compile, but the new call returns a different type:`));
+    for (const f of reviews.slice(0, 8)) lines.push(`    ${dim(where(r, f.usage.file, f.usage.line))}  ${f.usage.summary} (${f.usage.review})`);
+  }
   if (n.undone) lines.push(yellow(`  Undone: ${n.undone} change(s) the compiler did not accept.`));
   if (n.remaining) {
     lines.push((n.remaining ? red : green)(`  Still broken: ${n.remaining} place(s) need you:`));
@@ -90,6 +95,15 @@ export function markdownReport(r: MigrateResult, opts: { applied: boolean; testR
       const src = list[0].rule.source === "deprecation" ? "the library's own deprecation note" : list[0].rule.source === "recipe" ? "Unbreak recipe" : "same signature under a new name";
       out.push(`- \`${summary}\` (${list.length}×, from ${src}): ${list.slice(0, 6).map((u) => where(r, u.file, u.line)).join(", ")}${list.length > 6 ? ", …" : ""}`);
     }
+    out.push("");
+  }
+  const reviews = r.fixed.filter((f) => f.usage.review);
+  if (reviews.length) {
+    out.push("### Check these by eye");
+    out.push("");
+    out.push("These fixes compile, but the replacement returns a different type, so the result may not be what the old code meant.");
+    out.push("");
+    for (const f of reviews) out.push(`- ${where(r, f.usage.file, f.usage.line)}: \`${f.usage.summary}\` ${f.usage.review}`);
     out.push("");
   }
   if (r.remaining.length) {

@@ -4,9 +4,9 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { buildSurface } from "./surface.ts";
 import type { Surface } from "./surface.ts";
-import { deriveRules, indexRules } from "./rules.ts";
+import { deriveRules, indexRules, withNotesFrom } from "./rules.ts";
 import type { Rule } from "./rules.ts";
-import { fetchPackage, installedPackage } from "./npm.ts";
+import { fetchPackage, installedPackage, resolveVersion } from "./npm.ts";
 import { loadProject, overlayFor, ProgramFactory, diagnosticsOf, diagKey, diagKind } from "./project.ts";
 import type { Diag, Project } from "./project.ts";
 import { findUsages } from "./usages.ts";
@@ -38,6 +38,7 @@ export interface MigrateResult {
   remaining: Diag[]; // errors the upgrade still causes after Unbreak's fixes
   fixed: FixedUsage[];
   rejected: RejectedUsage[]; // fixes the compiler did not accept, so they were undone
+  triedFirst: RejectedUsage[]; // replacements that failed before a later suggestion worked
   manual: Usage[]; // places Unbreak recognised but could not rewrite safely
   originals: Map<string, string>;
   updated: Map<string, string>;
@@ -92,8 +93,21 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   t("fetch", s);
 
   s = Date.now();
-  const prev: Surface = buildSurface(installed.dir, opts.pkg, installed.version);
+  const installedSurface: Surface = buildSurface(installed.dir, opts.pkg, installed.version);
   const next: Surface = buildSurface(target.dir, opts.pkg, target.version);
+  // Libraries usually add "@deprecated, use X" in the last releases before a major. If the project
+  // is on an older release, borrow those notes from the newest release of its major.
+  let bridge: Surface | undefined;
+  const major = installed.version.split(".")[0];
+  if (!process.env.UNBREAK_OFFLINE) try {
+    const newest = resolveVersion(opts.pkg, major);
+    if (newest !== installed.version && newest.split(".")[0] === major && newest !== target.version) {
+      const b = fetchPackage(opts.pkg, newest);
+      bridge = buildSurface(b.dir, opts.pkg, b.version);
+      log(`Read deprecation notes from ${opts.pkg}@${newest}, the newest ${major}.x release.`);
+    }
+  } catch { /* offline or unpublished: carry on without */ }
+  const prev = withNotesFrom(installedSurface, bridge);
   const rules = deriveRules(prev, next, loadRecipes(opts.pkg, installed.version, target.version));
   const index = indexRules(rules);
   log(`Compared the two APIs: ${prev.entries.size} → ${next.entries.size} members, ${rules.filter((r) => r.kind !== "removed").length} migration rules.`);
@@ -202,16 +216,24 @@ export function migrate(opts: MigrateOptions): MigrateResult {
     }
     for (const [id, reason] of blame) {
       if (!active.has(id)) continue;
+      const u = candidates.find((x) => x.id === id)!;
+      rejected.push({ usage: { ...u }, reason });
+      // The library suggested more than one replacement: try the next one before giving up.
+      const alt = u.alternates.shift();
+      if (alt) { u.edits = alt.edits; u.summary = alt.summary; u.review = alt.review; continue; }
       active.delete(id);
-      rejected.push({ usage: candidates.find((u) => u.id === id)!, reason });
     }
   }
   t("fix-and-verify", s);
 
   const fixed = candidates.filter((u) => active.has(u.id)).map((usage) => ({ usage }));
+  // A fix that worked on a later suggestion is not "undone"; keep those attempts for the report.
+  const fixedIds = new Set(fixed.map((f) => f.usage.id));
+  const triedFirst = rejected.filter((x) => fixedIds.has(x.usage.id));
+  rejected.splice(0, rejected.length, ...rejected.filter((x) => !fixedIds.has(x.usage.id) && rejected.filter((y) => y.usage.id === x.usage.id).pop() === x));
   for (const f of [...updated.keys()]) if (!fixed.some((x) => x.usage.file === f)) updated.delete(f);
   log(`Kept ${fixed.length} fix(es) the compiler accepts; undid ${rejected.length}.`);
-  return { project, pkg: opts.pkg, from: installed.version, to: target.version, rules, usages, brokenBefore, hiddenBreaks, remaining, fixed, rejected, manual, originals, updated, rounds: rounds + 1, timings };
+  return { project, pkg: opts.pkg, from: installed.version, to: target.version, rules, usages, brokenBefore, hiddenBreaks, remaining, fixed, rejected, triedFirst, manual, originals, updated, rounds: rounds + 1, timings };
 }
 
 /** Writes the fixed files and bumps the version in package.json. Returns the files written. */
