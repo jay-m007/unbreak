@@ -34,6 +34,7 @@ export interface MigrateResult {
   rules: Rule[];
   usages: Usage[];
   brokenBefore: Diag[]; // errors the upgrade causes in the untouched code
+  hiddenBreaks: Usage[]; // uses of removed APIs whose error is hidden behind another one
   remaining: Diag[]; // errors the upgrade still causes after Unbreak's fixes
   fixed: FixedUsage[];
   rejected: RejectedUsage[]; // fixes the compiler did not accept, so they were undone
@@ -49,6 +50,17 @@ const MAX_ROUNDS = 6;
 function overlaps(d: Diag, u: Usage): boolean {
   const dEnd = d.start + Math.max(d.length, 1);
   return d.file === u.file && d.start < u.end && dEnd > u.start;
+}
+
+/** Maps a position in edited text back to the original text. */
+function toOld(placed: Placed[], pos: number): number {
+  let delta = 0;
+  for (const p of placed) {
+    if (p.newEnd <= pos) delta = p.oldEnd - p.newEnd;
+    else if (p.newStart <= pos) return p.oldStart;
+    else break;
+  }
+  return pos + delta;
 }
 
 function subtractByKind(after: Diag[], baseline: Diag[]): Diag[] {
@@ -103,9 +115,28 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   log(`Type-checked your code against ${target.version}: the upgrade breaks ${brokenBefore.length} place(s).`);
   t("check-upgraded", s);
 
-  // Pick the usages to fix: those sitting on an error the upgrade causes (+ deprecated ones if asked).
-  const candidates = usages.filter((u) => u.edits.length && (opts.deprecations || brokenBefore.some((d) => overlaps(d, u))));
-  const manual = usages.filter((u) => !u.edits.length && brokenBefore.some((d) => overlaps(d, u)));
+  // Pick the usages to fix: those on an error the upgrade causes, plus those whose API is gone from the
+  // new version (their errors can be hidden behind an earlier break, e.g. a missing import makes
+  // everything after it untyped). With --deprecations, every deprecated use too.
+  const willBreak = (u: Usage): boolean => {
+    const r = u.rule;
+    if (r.kind === "rename" || r.kind === "removed") return !next.entries.has(u.path);
+    if (r.kind === "renameOption") {
+      const method = u.path.slice(0, u.path.indexOf("("));
+      const key = u.path.slice(u.path.lastIndexOf(".") + 1);
+      return ![...next.entries.keys()].some((k) => k.startsWith(method + "(") && k.endsWith("." + key));
+    }
+    if (r.kind === "toObject") {
+      const oldSig = prev.entries.get(r.path)?.signatures.find((x) => x.declKey === r.sigKey)?.text;
+      return !next.entries.get(r.path)?.signatures.some((x) => x.text === oldSig);
+    }
+    return false;
+  };
+  const relevant = (u: Usage) => opts.deprecations || brokenBefore.some((d) => overlaps(d, u)) || willBreak(u);
+  const hiddenBreaks = usages.filter((u) => willBreak(u) && !brokenBefore.some((d) => overlaps(d, u)));
+  if (hiddenBreaks.length) log(`${hiddenBreaks.length} more use(s) of removed APIs are hidden behind those errors.`);
+  const candidates = usages.filter((u) => u.edits.length && relevant(u));
+  const manual = usages.filter((u) => !u.edits.length && relevant(u));
   const active = new Set(candidates.map((u) => u.id));
   const rejected: RejectedUsage[] = [];
   const originals = new Map<string, string>();
@@ -137,24 +168,29 @@ export function migrate(opts: MigrateOptions): MigrateResult {
       ...unchanged.filter((d) => !baseKeys.has(diagKey(d))),
       ...subtractByKind(edited, baseline.filter((d) => updated.has(d.file))),
     ];
-    // Which fixes does the compiler reject? An error on the same line as a fix is blamed on that fix.
+    // Which fixes does the compiler reject?
+    //  - an error inside a fix, or on its line, is blamed on that fix, unless the error sits on a
+    //    known break Unbreak is not fixing (a removed API, an undone fix): that one is expected;
+    //  - an error of a kind the upgrade alone never produced, not explained by a known break,
+    //    undoes the fixes in that file (cautious: we can't tell which fix caused it).
     const blame = new Map<number, string>();
+    const upgradedKinds = new Set(upgradedDiags.map((d) => d.file + "|" + diagKind(d)));
     for (const d of remaining) {
       const text = updated.get(d.file);
       const placed = placedByFile.get(d.file);
       if (!text || !placed) continue;
+      const oldStart = toOld(placed, d.start);
+      const explained = usages.some((u) => !active.has(u.id) && u.file === d.file && oldStart < u.end && oldStart + Math.max(d.length, 1) > u.start);
       const lineStart = text.lastIndexOf("\n", d.start - 1) + 1;
       const lineEndIdx = text.indexOf("\n", d.start);
       const lineEnd = lineEndIdx === -1 ? text.length : lineEndIdx;
+      let blamed = false;
       for (const p of placed) {
-        if (p.newEnd >= lineStart && p.newStart <= lineEnd && !blame.has(p.owner)) blame.set(p.owner, d.message);
+        const inside = d.start < p.newEnd && d.start + Math.max(d.length, 1) > p.newStart;
+        const sameLine = p.newEnd >= lineStart && p.newStart <= lineEnd;
+        if ((inside || (sameLine && !explained)) && !blame.has(p.owner)) { blame.set(p.owner, d.message); blamed = true; }
       }
-    }
-    // An error of a kind the upgrade alone never produced in that file, far from any fix: undo that file's fixes.
-    const upgradedKinds = new Set(upgradedDiags.map((d) => d.file + "|" + diagKind(d)));
-    for (const d of remaining) {
-      if (!updated.has(d.file) || upgradedKinds.has(d.file + "|" + diagKind(d))) continue;
-      if ([...blame.keys()].some((id) => candidates.find((u) => u.id === id)?.file === d.file)) continue;
+      if (blamed || explained || upgradedKinds.has(d.file + "|" + diagKind(d))) continue;
       for (const u of candidates) if (u.file === d.file && active.has(u.id) && !blame.has(u.id)) blame.set(u.id, `${d.message} (new error elsewhere in the file)`);
     }
     // Every round undoes at least one fix, so this loop always ends with a clean, final check.
@@ -175,7 +211,7 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   const fixed = candidates.filter((u) => active.has(u.id)).map((usage) => ({ usage }));
   for (const f of [...updated.keys()]) if (!fixed.some((x) => x.usage.file === f)) updated.delete(f);
   log(`Kept ${fixed.length} fix(es) the compiler accepts; undid ${rejected.length}.`);
-  return { project, pkg: opts.pkg, from: installed.version, to: target.version, rules, usages, brokenBefore, remaining, fixed, rejected, manual, originals, updated, rounds: rounds + 1, timings };
+  return { project, pkg: opts.pkg, from: installed.version, to: target.version, rules, usages, brokenBefore, hiddenBreaks, remaining, fixed, rejected, manual, originals, updated, rounds: rounds + 1, timings };
 }
 
 /** Writes the fixed files and bumps the version in package.json. Returns the files written. */

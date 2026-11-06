@@ -23,7 +23,8 @@ export function diffText(r: MigrateResult): string {
 
 export function counts(r: MigrateResult) {
   return {
-    broken: r.brokenBefore.length,
+    broken: r.brokenBefore.length + r.hiddenBreaks.length,
+    hidden: r.hiddenBreaks.length,
     fixes: r.fixed.length,
     undone: r.rejected.length,
     manual: r.manual.length,
@@ -40,15 +41,17 @@ export function terminalSummary(r: MigrateResult, applied: boolean): string {
     lines.push(green(`  Your code already type-checks against ${r.to}. Nothing to fix.`));
     return lines.join("\n");
   }
-  lines.push(`  The upgrade breaks ${bold(String(n.broken))} place(s) in your code.`);
+  lines.push(`  The upgrade breaks ${bold(String(n.broken))} place(s) in your code${n.hidden ? ` (${n.hidden} hidden behind other errors)` : ""}.`);
   lines.push(green(`  Fixed: ${n.fixes} change(s) in ${n.files} file(s), each one type-checks against ${r.to}.`));
   if (n.undone) lines.push(yellow(`  Undone: ${n.undone} change(s) the compiler did not accept.`));
   if (n.remaining) {
     lines.push((n.remaining ? red : green)(`  Still broken: ${n.remaining} place(s) need you:`));
     for (const d of r.remaining.slice(0, 12)) {
       const hint = r.manual.find((u) => u.file === d.file && u.line === d.line);
+      const tried = r.rejected.find((x) => x.usage.file === d.file && x.usage.line === d.line);
       lines.push(`    ${dim(where(r, d.file, d.line))}  ${d.message.slice(0, 140)}`);
       if (hint) lines.push(`      ${cyan("hint:")} ${hint.rule.note.slice(0, 160)}`);
+      if (tried) lines.push(`      ${cyan("tried:")} ${tried.usage.summary}, but the compiler said: ${tried.reason.slice(0, 140)}`);
     }
     if (r.remaining.length > 12) lines.push(dim(`    … and ${r.remaining.length - 12} more (see the report)`));
   } else {
@@ -94,7 +97,9 @@ export function markdownReport(r: MigrateResult, opts: { applied: boolean; testR
     out.push("");
     for (const d of r.remaining) {
       const hint = r.manual.find((u) => u.file === d.file && u.line === d.line);
-      out.push(`- \`${diagLine(r, d)}\`${hint ? `  \n  Library note: ${hint.rule.note}${hint.problem && hint.problem !== hint.rule.note ? `  \n  Why not automatic: ${hint.problem}` : ""}` : ""}`);
+      const tried = r.rejected.find((x) => x.usage.file === d.file && x.usage.line === d.line);
+      if (tried) out.push(`- \`${diagLine(r, d)}\`  \n  Unbreak tried \`${tried.usage.summary}\` but the compiler said: ${tried.reason}`);
+      else out.push(`- \`${diagLine(r, d)}\`${hint ? `  \n  Library note: ${hint.rule.note}${hint.problem && hint.problem !== hint.rule.note ? `  \n  Why not automatic: ${hint.problem}` : ""}` : ""}`);
     }
     out.push("");
   }

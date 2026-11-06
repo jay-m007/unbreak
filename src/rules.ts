@@ -62,6 +62,12 @@ export function locate(hint: string, oldPath: string, next: Surface): string | u
   if (next.entries.has(root + "." + hint)) return root + "." + hint;
   const prefixed = oldPath.includes(":") ? oldPath.slice(0, oldPath.indexOf(":") + 1) + hint : undefined;
   if (prefixed && next.entries.has(prefixed)) return prefixed;
+  // Hints often name an instance ("client.users.get()") rather than the export ("Client#users.get").
+  const tail = hint.split(".").slice(1).join(".");
+  if (tail) {
+    const matches = [...next.entries.keys()].filter((k) => k.startsWith(root) && (k.endsWith("." + tail) || k.endsWith("#" + tail)) && !k.includes("("));
+    if (matches.length === 1) return matches[0];
+  }
   return undefined;
 }
 

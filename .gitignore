@@ -2,3 +2,5 @@ node_modules/
 dist/
 .unbreak-cache/
 *.tgz
+
+!test/fixtures/demo-app/node_modules/
