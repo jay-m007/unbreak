@@ -118,7 +118,9 @@ Exit codes: `0` nothing left to do, `2` some places need a person, `1` error.
 - **JavaScript projects** are analysed with `checkJs`, which sees less than a typed project.
 - **`@types/*` libraries** (e.g. yargs) work when `@types/<name>` is installed: Unbreak compares it with the
   matching `@types` release (same major.minor, else same major) and bumps both packages. Sub-path imports
-  (`pkg/sub`) in `@types` packages are not read yet.
+  (`pkg/sub`) in `@types` packages are not read yet. Real-world check: ws 7 → 8 breaks `new WebSocket.Server()`
+  (now a named export, `WebSocketServer`); Unbreak finds the break but can't fix it yet, because that needs a new
+  import added, which it doesn't do.
 - Tested deeply on one library so far (faker). Other libraries work through the same engine but need their own
   testing; please open an issue with results.
 
