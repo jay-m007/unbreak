@@ -1,0 +1,50 @@
+# Copy to .github/workflows/unbreak.yml
+# When Renovate or Dependabot bumps an npm library, run Unbreak on the PR branch, push the
+# compiler-checked fixes to it, and attach the report as a comment.
+name: Unbreak dependency PRs
+on:
+  pull_request:
+    paths: [package.json]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  unbreak:
+    if: github.actor == 'renovate[bot]' || github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Find the bumped package
+        id: bump
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          node -e '
+            const {execSync}=require("child_process");
+            const old=JSON.parse(execSync("git show origin/${{ github.base_ref }}:package.json"));
+            const cur=require("./package.json");
+            for (const f of ["dependencies","devDependencies"]) for (const [n,v] of Object.entries(cur[f]||{}))
+              if (old[f]?.[n] && old[f][n]!==v && !n.startsWith("@types/")) { console.log(`pkg=${n}\nver=${v.replace(/^[\^~]/,"")}`); process.exit(0); }
+          ' >> "$GITHUB_OUTPUT"
+      - name: Install the version the PR moves away from
+        if: steps.bump.outputs.pkg
+        run: git stash -q 2>/dev/null; git checkout -q origin/${{ github.base_ref }} -- package.json package-lock.json && npm ci && git checkout -q HEAD -- package.json package-lock.json
+      - name: Run Unbreak
+        if: steps.bump.outputs.pkg
+        run: npx unbreak "${{ steps.bump.outputs.pkg }}@${{ steps.bump.outputs.ver }}" --apply --report unbreak-report.md || true
+      - name: Push fixes
+        if: steps.bump.outputs.pkg
+        run: |
+          git config user.name "unbreak[bot]"
+          git config user.email "unbreak@users.noreply.github.com"
+          git add -A ':!unbreak-report.md'
+          git diff --cached --quiet || { git commit -m "Fix code broken by ${{ steps.bump.outputs.pkg }} upgrade"; git push; }
+      - name: Comment the report
+        if: steps.bump.outputs.pkg && hashFiles('unbreak-report.md') != ''
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file unbreak-report.md

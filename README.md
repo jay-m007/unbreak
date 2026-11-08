@@ -122,6 +122,10 @@ Exit codes: `0` nothing left to do, `2` some places need a person, `1` error.
 - Tested deeply on one library so far (faker). Other libraries work through the same engine but need their own
   testing; please open an issue with results.
 
+## On Renovate / Dependabot PRs
+
+[`examples/unbreak-on-dependency-prs.yml`](examples/unbreak-on-dependency-prs.yml) is a GitHub Actions workflow: when a bot bumps a library, it runs Unbreak on the PR branch, pushes the compiler-checked fixes, and comments the report. It is an untested starting point; adjust the install step to your package manager.
+
 ## How it's built
 
 TypeScript, run directly by Node's type stripping, with one runtime dependency: the TypeScript compiler API.

@@ -100,12 +100,12 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   let installedSrc: FetchedPackage = installed;
   let targetSrc: FetchedPackage = target;
   let typesInfo: MigrateResult["types"];
-  if (!typeEntries(installed.dir, opts.pkg).size) {
+  if (!typeEntries(installed.dir, opts.pkg).has(opts.pkg)) {
     const inst = installedPackage(project.dir, typesName);
     if (inst) {
       installedSrc = { name: opts.pkg, version: installed.version, dir: inst.dir };
       log(`${opts.pkg} ships no types; using ${typesName}@${inst.version}.`);
-      if (!typeEntries(target.dir, opts.pkg).size) {
+      if (!typeEntries(target.dir, opts.pkg).has(opts.pkg)) {
         const tv = resolveTypesVersion(typesName, target.version);
         const t2 = fetchPackage(typesName, tv);
         targetSrc = { name: opts.pkg, version: target.version, dir: t2.dir };
