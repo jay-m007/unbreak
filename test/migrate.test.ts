@@ -59,3 +59,17 @@ test("the CLI exits 2 when something still needs a person, and prints JSON", () 
   assert.equal(json.fixed, 6);
   assert.equal(json.remaining, 2);
 });
+
+test("reads typings from @types when the library ships none, and bumps both packages", () => {
+  const dir = copyFixture("typed-app");
+  const r = migrate({ projectDir: dir, pkg: "tinyutil", to: "2.0.0" });
+  assert.deepEqual(r.types, { name: "@types/tinyutil", from: "1.2.3", to: "2.0.1" });
+  assert.deepEqual(r.fixed.map((f) => f.usage.summary), ["import slugify → slugifyText"]);
+  assert.equal(r.remaining.length, 0);
+  const written = writeResult(r);
+  assert.deepEqual(written.sort(), ["package.json", "src/app.ts"]);
+  assert.match(readFileSync(join(dir, "src/app.ts"), "utf8"), /import \{ slugifyText as slugify, pad \} from "tinyutil";/);
+  const pj = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+  assert.equal(pj.dependencies.tinyutil, "^2.0.0");
+  assert.equal(pj.devDependencies["@types/tinyutil"], "^2.0.1");
+});

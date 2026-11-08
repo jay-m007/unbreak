@@ -4,6 +4,7 @@
 import ts from "typescript";
 import { existsSync, readFileSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
+import { typesPackageName } from "./npm.ts";
 
 export type Kind = "function" | "method" | "property" | "class" | "variable" | "type" | "namespace" | "option" | "other";
 
@@ -83,9 +84,11 @@ export function packageRelative(fileName: string, pkgName: string, pkgDir?: stri
     const rel = relative(pkgDir, fileName).replace(/\\/g, "/");
     if (!rel.startsWith("..")) return rel;
   }
-  const marker = `/node_modules/${pkgName}/`;
-  const i = norm.lastIndexOf(marker);
-  return i === -1 ? undefined : norm.slice(i + marker.length);
+  for (const marker of [`/node_modules/${pkgName}/`, `/node_modules/${typesPackageName(pkgName)}/`]) {
+    const i = norm.lastIndexOf(marker);
+    if (i !== -1) return norm.slice(i + marker.length);
+  }
+  return undefined;
 }
 
 export function declKeyOf(decl: ts.Node, pkgName: string, pkgDir?: string): string | undefined {

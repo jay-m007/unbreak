@@ -116,7 +116,9 @@ Exit codes: `0` nothing left to do, `2` some places need a person, `1` error.
   hand-written [recipes](CONTRIBUTING.md#adding-a-recipe). A change with none of those is reported, not fixed.
 - **Through-a-variable uses are reported, not rewritten.** `const r = faker.random; r.word()` is listed for you.
 - **JavaScript projects** are analysed with `checkJs`, which sees less than a typed project.
-- **npm packages with bundled types.** Libraries whose types live in `@types/*` are not supported yet.
+- **`@types/*` libraries** (e.g. yargs) work when `@types/<name>` is installed: Unbreak compares it with the
+  matching `@types` release (same major.minor, else same major) and bumps both packages. Sub-path imports
+  (`pkg/sub`) in `@types` packages are not read yet.
 - Tested deeply on one library so far (faker). Other libraries work through the same engine but need their own
   testing; please open an issue with results.
 

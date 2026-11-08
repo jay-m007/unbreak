@@ -1,0 +1,1 @@
+{ "name": "typed-app", "private": true, "type": "module", "dependencies": { "tinyutil": "^1.2.0" }, "devDependencies": { "@types/tinyutil": "^1.2.3" } }

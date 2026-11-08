@@ -77,3 +77,25 @@ export function installedPackage(projectDir: string, name: string): FetchedPacka
     cur = parent;
   }
 }
+
+/** The DefinitelyTyped package name for a library: yargs → @types/yargs, @scope/pkg → @types/scope__pkg. */
+export function typesPackageName(name: string): string {
+  return "@types/" + (name.startsWith("@") ? name.slice(1).replace("/", "__") : name);
+}
+
+/** Picks the @types release that matches a library version: same major.minor, else the same major. */
+export function resolveTypesVersion(typesName: string, libVersion: string): string {
+  const [major, minor] = libVersion.split(".");
+  if (process.env.UNBREAK_OFFLINE) {
+    // Offline (tests): only releases already in the cache can be used.
+    const root = join(cacheRoot(), "packages");
+    const have = existsSync(root) ? readdirSync(root).filter((d) => d.startsWith(safeName(typesName) + "@")).map((d) => d.slice(safeName(typesName).length + 1)) : [];
+    for (const prefix of [`${major}.${minor}.`, `${major}.`]) {
+      const hit = have.filter((v) => v.startsWith(prefix)).sort(compareVersions).pop();
+      if (hit) return hit;
+    }
+  } else for (const spec of [`${major}.${minor}`, major]) {
+    try { return resolveVersion(typesName, spec); } catch { /* try the wider range */ }
+  }
+  throw new Error(`${typesName} has no release for ${typesName.replace("@types/", "")} ${libVersion} (looked for ${major}.${minor}.x and ${major}.x).`);
+}

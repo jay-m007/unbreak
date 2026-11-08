@@ -2,11 +2,12 @@
 // fixes the compiler accepts.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { buildSurface } from "./surface.ts";
+import { buildSurface, typeEntries } from "./surface.ts";
 import type { Surface } from "./surface.ts";
 import { deriveRules, indexRules, withNotesFrom } from "./rules.ts";
 import type { Rule } from "./rules.ts";
-import { fetchPackage, installedPackage, resolveVersion } from "./npm.ts";
+import { fetchPackage, installedPackage, resolveTypesVersion, resolveVersion, typesPackageName } from "./npm.ts";
+import type { FetchedPackage } from "./npm.ts";
 import { loadProject, overlayFor, ProgramFactory, diagnosticsOf, diagKey, diagKind } from "./project.ts";
 import type { Diag, Project } from "./project.ts";
 import { findUsages } from "./usages.ts";
@@ -31,6 +32,7 @@ export interface MigrateResult {
   pkg: string;
   from: string;
   to: string;
+  types?: { name: string; from: string; to: string }; // the @types package that carries the typings, if any
   rules: Rule[];
   usages: Usage[];
   brokenBefore: Diag[]; // errors the upgrade causes in the untouched code
@@ -93,13 +95,32 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   t("fetch", s);
 
   s = Date.now();
-  const installedSurface: Surface = buildSurface(installed.dir, opts.pkg, installed.version);
-  const next: Surface = buildSurface(target.dir, opts.pkg, target.version);
+  // Libraries without bundled typings keep them in DefinitelyTyped: read those instead.
+  const typesName = typesPackageName(opts.pkg);
+  let installedSrc: FetchedPackage = installed;
+  let targetSrc: FetchedPackage = target;
+  let typesInfo: MigrateResult["types"];
+  if (!typeEntries(installed.dir, opts.pkg).size) {
+    const inst = installedPackage(project.dir, typesName);
+    if (inst) {
+      installedSrc = { name: opts.pkg, version: installed.version, dir: inst.dir };
+      log(`${opts.pkg} ships no types; using ${typesName}@${inst.version}.`);
+      if (!typeEntries(target.dir, opts.pkg).size) {
+        const tv = resolveTypesVersion(typesName, target.version);
+        const t2 = fetchPackage(typesName, tv);
+        targetSrc = { name: opts.pkg, version: target.version, dir: t2.dir };
+        typesInfo = { name: typesName, from: inst.version, to: tv };
+        log(`Fetched ${typesName}@${tv} to match ${opts.pkg}@${target.version}.`);
+      }
+    }
+  }
+  const installedSurface: Surface = buildSurface(installedSrc.dir, opts.pkg, installed.version);
+  const next: Surface = buildSurface(targetSrc.dir, opts.pkg, target.version);
   // Libraries usually add "@deprecated, use X" in the last releases before a major. If the project
   // is on an older release, borrow those notes from the newest release of its major.
   let bridge: Surface | undefined;
   const major = installed.version.split(".")[0];
-  if (!process.env.UNBREAK_OFFLINE) try {
+  if (!process.env.UNBREAK_OFFLINE && installedSrc === installed) try {
     const newest = resolveVersion(opts.pkg, major);
     if (newest !== installed.version && newest.split(".")[0] === major && newest !== target.version) {
       const b = fetchPackage(opts.pkg, newest);
@@ -121,7 +142,10 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   t("scan", s);
 
   s = Date.now();
-  const overlay = overlayFor(installed.dir, target.dir);
+  // Typings from @types are swapped in place; if the new release bundles its own, the library folder is swapped.
+  const overlay = installedSrc === installed ? overlayFor(installed.dir, target.dir)
+    : targetSrc === target ? overlayFor(installed.dir, target.dir)
+    : overlayFor(installedSrc.dir, targetSrc.dir);
   const upgraded = factory.create(overlay, undefined);
   const upgradedDiags = diagnosticsOf(upgraded, project);
   const baseKeys = new Set(baseline.map(diagKey));
@@ -233,7 +257,7 @@ export function migrate(opts: MigrateOptions): MigrateResult {
   rejected.splice(0, rejected.length, ...rejected.filter((x) => !fixedIds.has(x.usage.id) && rejected.filter((y) => y.usage.id === x.usage.id).pop() === x));
   for (const f of [...updated.keys()]) if (!fixed.some((x) => x.usage.file === f)) updated.delete(f);
   log(`Kept ${fixed.length} fix(es) the compiler accepts; undid ${rejected.length}.`);
-  return { project, pkg: opts.pkg, from: installed.version, to: target.version, rules, usages, brokenBefore, hiddenBreaks, remaining, fixed, rejected, triedFirst, manual, originals, updated, rounds: rounds + 1, timings };
+  return { project, pkg: opts.pkg, from: installed.version, to: target.version, types: typesInfo, rules, usages, brokenBefore, hiddenBreaks, remaining, fixed, rejected, triedFirst, manual, originals, updated, rounds: rounds + 1, timings };
 }
 
 /** Writes the fixed files and bumps the version in package.json. Returns the files written. */
@@ -245,11 +269,13 @@ export function writeResult(r: MigrateResult, bumpPackageJson = true): string[] 
     const raw = readFileSync(pjPath, "utf8");
     const pj = JSON.parse(raw);
     let changed = false;
-    for (const field of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
-      const cur = pj[field]?.[r.pkg];
+    const bumps: [string, string][] = [[r.pkg, r.to]];
+    if (r.types) bumps.push([r.types.name, r.types.to]);
+    for (const [pkg, to] of bumps) for (const field of ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"]) {
+      const cur = pj[field]?.[pkg];
       if (typeof cur !== "string" || /^(workspace|file|link|git|https?):/.test(cur)) continue;
       const prefix = cur.match(/^[\^~]/)?.[0] ?? "";
-      pj[field][r.pkg] = prefix + r.to;
+      pj[field][pkg] = prefix + to;
       changed = true;
     }
     if (changed) {
